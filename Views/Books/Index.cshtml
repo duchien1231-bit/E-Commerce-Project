@@ -1,0 +1,60 @@
+@model ECommerceProject.ViewModels.BookCatalogViewModel
+@{
+    ViewData["Title"] = Model.SelectedCategory?.Name ?? "Danh sách truyện";
+}
+
+<div class="container catalog-page">
+    <div class="section-heading mb-3">
+        <div><span class="eyebrow">KỆ SÁCH TRỰC TUYẾN</span><h1 class="h2 mt-2">@(Model.SelectedCategory?.Name ?? "Tất cả truyện")</h1></div>
+        <span class="catalog-count">@Model.Books.Count cuốn truyện</span>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.SearchTerm))
+    {
+        <p class="search-summary">Kết quả tìm kiếm cho <strong>“@Model.SearchTerm”</strong></p>
+    }
+
+    <div class="category-list category-list--catalog">
+        <a class="category-pill @(Model.SelectedCategory is null ? "active" : "")" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm">Tất cả</a>
+        @foreach (var category in Model.Categories)
+        {
+            <a class="category-pill @(Model.SelectedCategory?.Id == category.Id ? "active" : "")" asp-action="Index" asp-route-categoryId="@category.Id" asp-route-searchTerm="@Model.SearchTerm">@category.Name</a>
+        }
+    </div>
+
+    @if (Model.Books.Count == 0)
+    {
+        <div class="empty-state"><h2 class="h5">Không tìm thấy truyện phù hợp</h2><p class="mb-0">Thử một tên truyện, tác giả hoặc thể loại khác nhé.</p></div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var book in Model.Books)
+            {
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                    <article class="book-card h-100">
+                        <a class="book-cover" asp-action="Details" asp-route-id="@book.Id" aria-label="Xem @book.Title">
+                            @if (!string.IsNullOrWhiteSpace(book.CoverImageUrl))
+                            {
+                                <img src="@book.CoverImageUrl" alt="Bìa @book.Title" />
+                            }
+                            else
+                            {
+                                <span>@book.Title</span>
+                            }
+                        </a>
+                        <div class="book-card__body">
+                            <span class="book-category">@book.Category.Name</span>
+                            <h2><a asp-action="Details" asp-route-id="@book.Id">@book.Title</a></h2>
+                            <p>@book.Author</p>
+                            <div class="book-card__meta">
+                                <strong>@book.Price.ToString("N0") ₫</strong>
+                                <span class="@(book.Stock > 0 ? "text-success" : "text-danger")">@(book.Stock > 0 ? $"Còn {book.Stock}" : "Hết hàng")</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,30 @@
+@model ECommerceProject.Models.Book
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="mb-4"><a asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="text-decoration-none">← Trở lại @Model.Category.Name</a></div>
+<div class="row g-5 align-items-start">
+    <div class="col-md-5 col-lg-4">
+        <div class="detail-cover">
+            @if (!string.IsNullOrWhiteSpace(Model.CoverImageUrl))
+            {
+                <img src="@Model.CoverImageUrl" alt="Bìa @Model.Title" />
+            }
+            else
+            {
+                <span>@Model.Title</span>
+            }
+        </div>
+    </div>
+    <div class="col-md-7 col-lg-8">
+        <span class="book-category">@Model.Category.Name</span>
+        <h1 class="display-6 fw-bold mt-2">@Model.Title</h1>
+        <p class="text-secondary">Tác giả: <strong>@Model.Author</strong></p>
+        <div class="detail-price my-4">@Model.Price.ToString("N0") ₫</div>
+        <div class="stock-note @(Model.Stock > 0 ? "available" : "unavailable")">@(Model.Stock > 0 ? $"Còn hàng · {Model.Stock} cuốn trong kho" : "Hiện đã hết hàng")</div>
+        <h2 class="h5 mt-4">Giới thiệu</h2>
+        <p class="text-secondary lh-lg">@(string.IsNullOrWhiteSpace(Model.Description) ? "Thông tin giới thiệu đang được cập nhật." : Model.Description)</p>
+        <a asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="btn btn-outline-dark mt-3">Xem thêm truyện @Model.Category.Name</a>
+    </div>
+</div>

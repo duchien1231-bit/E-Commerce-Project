@@ -1,0 +1,98 @@
+@model ECommerceProject.ViewModels.HomeViewModel
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<section class="store-hero">
+    <div class="container store-hero__inner">
+        <div class="book-shelf" aria-hidden="true">
+            <div class="book-shelf__row">
+                <span class="shelf-book shelf-book--wine"><i>NHỮNG NGÀY XANH</i></span>
+                <span class="shelf-book shelf-book--cream"><i>GÓC NHỎ</i></span>
+                <span class="shelf-book shelf-book--teal"><i>ĐƯỜNG VỀ NHÀ</i></span>
+                <span class="shelf-book shelf-book--orange"><i>CHUYỆN MÙA HẠ</i></span>
+                <span class="shelf-book shelf-book--navy"><i>THẾ GIỚI MỚI</i></span>
+                <span class="shelf-book shelf-book--sage"><i>NGƯỜI KỂ CHUYỆN</i></span>
+                <span class="shelf-book shelf-book--rust"><i>PHÍA CHÂN TRỜI</i></span>
+                <span class="shelf-book shelf-book--blue"><i>ÁNH TRĂNG</i></span>
+                <span class="shelf-book shelf-book--gold"><i>HẸN GẶP LẠI</i></span>
+            </div>
+            <div class="book-shelf__ledge"></div>
+            <div class="book-shelf__shadow"></div>
+        </div>
+
+        <div class="store-hero__copy">
+            <span class="hero-kicker">ONLINE BOOK'S STORE</span>
+            <h1>Tìm thấy câu chuyện bạn yêu thích</h1>
+            <p>Truyện hay cho những khoảng thời gian thật riêng. Khám phá kệ sách và chọn cuốn tiếp theo của bạn.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary btn-lg" asp-controller="Books" asp-action="Index">Khám phá truyện</a>
+                <a class="btn btn-outline-forest btn-lg" asp-controller="Books" asp-action="Index">Xem tất cả</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container benefit-row" aria-label="Điểm nổi bật">
+    <article class="benefit-card"><span class="benefit-icon">01</span><div><strong>Dễ tìm truyện</strong><small>Lọc theo thể loại bạn thích</small></div></article>
+    <article class="benefit-card"><span class="benefit-icon">02</span><div><strong>Thông tin rõ ràng</strong><small>Xem giá và số lượng còn</small></div></article>
+    <article class="benefit-card"><span class="benefit-icon">03</span><div><strong>Góc đọc riêng</strong><small>Tạo tài khoản trong vài bước</small></div></article>
+    <article class="benefit-card"><span class="benefit-icon">04</span><div><strong>Luôn có điều mới</strong><small>Khám phá nhiều thể loại</small></div></article>
+</section>
+
+<div class="container home-sections">
+    <section id="categories" class="home-section">
+        <div class="section-heading">
+            <div><span class="eyebrow">CHỌN THEO SỞ THÍCH</span><h2 class="h3 mt-2">Thể loại truyện</h2></div>
+            <a asp-controller="Books" asp-action="Index" class="section-link">Xem tất cả <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="category-list">
+            @foreach (var category in Model.Categories)
+            {
+                <a class="category-pill" asp-controller="Books" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name <span aria-hidden="true">→</span></a>
+            }
+        </div>
+    </section>
+
+    <section id="featured" class="home-section">
+        <div class="section-heading">
+            <div><span class="eyebrow">ĐƯỢC CHỌN RIÊNG CHO BẠN</span><h2 class="h3 mt-2">Truyện nổi bật</h2></div>
+            <a asp-controller="Books" asp-action="Index" class="section-link">Xem danh sách <span aria-hidden="true">→</span></a>
+        </div>
+        @if (Model.FeaturedBooks.Count == 0)
+        {
+            <div class="empty-state mt-3">Chưa có truyện nổi bật.</div>
+        }
+        else
+        {
+            <div class="row g-4 mt-1">
+                @foreach (var book in Model.FeaturedBooks)
+                {
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <article class="book-card h-100">
+                            <a class="book-cover" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" aria-label="Xem @book.Title">
+                                @if (!string.IsNullOrWhiteSpace(book.CoverImageUrl))
+                                {
+                                    <img src="@book.CoverImageUrl" alt="Bìa @book.Title" />
+                                }
+                                else
+                                {
+                                    <span>@book.Title</span>
+                                }
+                            </a>
+                            <div class="book-card__body">
+                                <span class="book-category">@book.Category.Name</span>
+                                <h3><a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">@book.Title</a></h3>
+                                <p>@book.Author</p>
+                                <div class="book-card__meta">
+                                    <strong>@book.Price.ToString("N0") ₫</strong>
+                                    <span class="@(book.Stock > 0 ? "text-success" : "text-danger")">@(book.Stock > 0 ? $"Còn {book.Stock}" : "Hết hàng")</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                }
+            </div>
+        }
+    </section>
+</div>

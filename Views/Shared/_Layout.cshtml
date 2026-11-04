@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Tiệm Truyện</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ECommerceProject.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="store-header">
+        <div class="utility-bar">
+            <div class="container utility-bar__inner">
+                <span>Góc nhỏ để tìm câu chuyện bạn yêu thích</span>
+                <a asp-controller="Books" asp-action="Index">Khám phá cửa hàng <span aria-hidden="true">→</span></a>
+            </div>
+        </div>
+
+        <div class="container brand-row">   
+            <a class="store-brand" asp-controller="Home" asp-action="Index" aria-label="Tiệm Truyện - Trang chủ">
+                <span class="store-brand__mark" aria-hidden="true"><span></span><span></span><span></span></span>
+                <span class="store-brand__words"><strong>Tiệm Truyện</strong><small>BOOK STORE</small></span>
+            </a>
+
+            <form asp-controller="Books" asp-action="Index" method="get" class="store-search" role="search">
+                <label class="visually-hidden" for="book-search">Tìm truyện hoặc tác giả</label>
+                <input id="book-search" name="searchTerm" type="search" placeholder="Tìm truyện, tác giả..." />
+                <button type="submit" class="store-search__button" aria-label="Tìm kiếm"><span class="search-glass" aria-hidden="true"></span></button>
+            </form>
+
+            <div class="header-account">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <span class="header-account__greeting">Xin chào, <strong>@User.Identity.Name</strong></span>
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                        <button type="submit" class="btn btn-outline-forest btn-sm">Đăng xuất</button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="header-account__link">Tài khoản</a>
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-accent btn-sm">Đăng ký</a>
+                }
+            </div>
+        </div>
+
+        <nav class="navbar navbar-expand-md navbar-dark store-nav">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#storeNavigation" aria-controls="storeNavigation" aria-expanded="false" aria-label="Mở menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="storeNavigation">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Books" asp-action="Index">Cửa hàng</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index" asp-fragment="categories">Thể loại</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index" asp-fragment="featured">Truyện nổi bật</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="store-footer">
+        <div class="container">&copy; 2026 Tiệm Truyện · Đọc thêm một trang, vui thêm một chút.</div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

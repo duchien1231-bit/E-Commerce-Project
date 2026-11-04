@@ -1,0 +1,25 @@
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.cache
+
+# Build output
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
+*.csproj.user
+
+# Logs
+*.log
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Local secrets
+appsettings.Development.json
